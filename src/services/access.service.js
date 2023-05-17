@@ -1,7 +1,10 @@
 const shopModel= require('../models/shope.model')
 const bcrypt = require('bcrypt')
 const { log } = require('console')
-const crypto = require('crypto')
+const crypto = require('node:crypto')
+const KeyTokenService = require('./keyToken.service')
+const { creatTokenPair } = require('../auth/authUtils')
+const { getInfoData } = require('../utils')
 const RoleShop = {
     SHOP:'SHOP',
     WRITER:'WRITER',
@@ -26,12 +29,39 @@ class AccessService{
             })
             if(newShop){
                 // create privateKey, publicKey
-                const { privateKey, publicKey} = crypto.generateKeyPairSync('rsa',{
-                    modulusLength:4096
-                })
+                const privateKey = crypto.randomBytes(64).toString('hex')
+                const publicKey = crypto.randomBytes(64).toString('hex')
+                //public key cryptography standard
                 console.log({privateKey, publicKey});
+                const keyStore = await KeyTokenService.createKeyToken({
+                    userId: newShop._id,
+                    publicKey,
+                    privateKey
+                })
+                if(!keyStore){
+                    return{
+                        code:"xxxx",
+                        message:'keyStore error' 
+                    }
+                }
+                //create token pair
+                const tokens = await creatTokenPair({userId: newShop._id, email}, publicKey,privateKey)
+                console.log(`Create Token success::`, tokens);
+                return{
+                    code:201,
+                    metadata:{
+                        shop: getInfoData({ fileds : ['_id','name','email'], object: newShop }),
+                        tokens
+                    }
+                }
+                // const tokens = await
+            }
+            return{
+                code:200,
+                metadata:null
             }
         } catch (error) {
+            console.log(error);
             return{
                 code:'xxx',
                 message:error.message,
