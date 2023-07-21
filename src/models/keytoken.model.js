@@ -8,19 +8,23 @@ var keyTokenSchema = new Schema({
     user:{
         type:Schema.Types.ObjectId,
         required:true,
-        ref:'shop'
+        ref:'Shop'
     },
     privateKey:{
         type:String,
-        require:true
+        required:true
     },
     publicKey:{
         type:String,
-        require:true
+        required:true
+    },
+    refreshTokensUsed:{
+        type:Array, // những refreshtoken đã sử dụng
+        default:[]
     },
     refreshToken:{
-        type:Array,
-        default:[]
+        type: String,
+        required: true
     }
 },{
     collection: COLLECTION_NAME,

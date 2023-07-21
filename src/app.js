@@ -23,5 +23,19 @@ app.use('', require('./routes'))
 
 
 //! handling err
+app.use((req,res,next)=>{
+    const error = new Error('Not Dound')
+    error.status = 404
+    next(error)
+})
+app.use((error, req,res,next)=>{
+    const statusCode = error.status || 500
+    return res.status(statusCode).json({
+        status:"error",
+        code: statusCode,
+        message: error.message || 'Internal Server Error'
+    })
+})
+
 
 module.exports = app

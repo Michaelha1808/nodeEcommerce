@@ -1,17 +1,26 @@
 const AccessService = require("../services/access.service");
 
+const {CREATED,OK,SuccessRespone} = require('../core/success.respone')
+
 class AccessController{
-    signUp = async(req,res,next)=>{
-        try {
-            console.log(`[p]::signUp::`,req.body);
-            /**
-             * 200 ok
-             * 201 create
-             */
-            return res.status(201).json( await AccessService.signUp(req.body))
-        } catch (error) {
-            next(error)
-        }
+
+    login = async (req, res, next)=>{
+        new SuccessRespone({
+            metadata: await AccessService.login(req.body),
+        }).send(res)
+    }
+
+     signUp = async(req,res,next)=>{
+        
+        new CREATED({
+            message:'Registered OK!',
+            metadata: await AccessService.signUp(req.body),
+            options:{
+                limit:9
+            }
+        }).send(res)
+        //  return res.status(201).json( await AccessService.signUp(req.body))
+        
     }
 }
 module.exports = new AccessController()
