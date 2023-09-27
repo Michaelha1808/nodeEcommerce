@@ -1,4 +1,4 @@
-const shopModel = require('../models/shope.model')
+const shopModel = require('../models/shop.model')
 const bcrypt = require('bcrypt')
 const { log } = require('console')
 const crypto = require('node:crypto')
