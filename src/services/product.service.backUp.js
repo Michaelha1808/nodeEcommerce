@@ -8,19 +8,32 @@ class ProductFactory {
         type:'Clothing',
         payload
     */
-
-
-    static productRegistry = {} //* key - class
-    static registerProductType(type, classRef) {
-        ProductFactory.productRegistry[type] = classRef
-    }
-
     static async createProduct(type, payload) {
-        const productClass = ProductFactory.productRegistry[type]
-        if (!productClass) throw new BadRequestError(`Invalid Product Type ${type}`)
-        return new productClass(payload).createProduct()
+        switch (type) {
+            case 'Electronics':
+                return new Electronics(payload).createProduct()
+            case 'Clothing':
+                return new Clothing(payload).createProduct()
+            case 'Furniture':
+                return new Furniture(payload).createProduct()
+            default:
+                throw new BadRequestError(`Invalid Product Type ${type}`)
+        }
     }
 }
+
+//define base product class
+/*
+product_name: { type: String, required: true },
+    product_thumb: { type: String, required: true },
+    product_description: String,
+    product_price: { type: Number, required: true },
+    product_quantity: { type: Number, required: true },
+    product_type: { type: String, required: true, enum: ['Electronics', 'Clothing', 'Furniture'] },
+    product_shop: { type: Schema.Types.ObjectId, ref: 'Shop' },
+    product_attributes: { type: Schema.Types.Mixed, required: true }
+*/
+
 class Product {
     constructor({
         product_name, product_thumb, product_description, product_price,
@@ -98,13 +111,5 @@ class Furniture extends Product {
 
     }
 }
-
-
-//* register product_types
-
-ProductFactory.registerProductType('Electronics', Electronics)
-ProductFactory.registerProductType('Clothing', Clothing)
-ProductFactory.registerProductType('Furniture', Furniture)
-
 
 module.exports = ProductFactory
