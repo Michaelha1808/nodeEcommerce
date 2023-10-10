@@ -21,10 +21,10 @@ const updateNestedObjectParser = obj => {
     console.log(`[1]::`, obj);
     const final = {}
     Object.keys(obj).forEach(k => {
-        if (typeof obj[k] === 'Object' && !Array.isArray(obj[k])) {
+        if (typeof obj[k] === 'object' && !Array.isArray(obj[k])) {
             const respone = updateNestedObjectParser(obj[k])
             Object.keys(respone).forEach(a => {
-                final[`${k}.${a}`] = res[a]
+                final[`${k}.${a}`] = respone[a]
             })
         } else {
             final[k] = obj[k]
