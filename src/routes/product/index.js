@@ -3,11 +3,10 @@ const router = express.Router()
 const ProductController = require('../../controllers/product.controller')
 const { asyncHandler } = require('../../auth/checkAuth')
 const { authentication } = require('../../auth/authUtils')
-const productController = require('../../controllers/product.controller')
 
-router.get('/search/:keySearch', asyncHandler(productController.getListSearchProduct))
-router.get('/', asyncHandler(productController.findAllProducts))
-router.get('/:product_id', asyncHandler(productController.findProduct))
+router.get('/search/:keySearch', asyncHandler(ProductController.getListSearchProduct))
+router.get('/', asyncHandler(ProductController.findAllProducts))
+router.get('/:product_id', asyncHandler(ProductController.findProduct))
 
 
 
@@ -25,8 +24,8 @@ router.post('/unpublish/:id', asyncHandler(ProductController.unPublishProductByS
 
 
 //* query
-router.get('/drafts/all', asyncHandler(productController.getAllDraftsForShop))
-router.get('/published/all', asyncHandler(productController.getAllPublishForShop))
+router.get('/drafts/all', asyncHandler(ProductController.getAllDraftsForShop))
+router.get('/published/all', asyncHandler(ProductController.getAllPublishForShop))
 
 
 
