@@ -150,13 +150,18 @@ class DiscountService {
             discount_is_active,
             discount_max_uses,
             discount_min_order_value,
-            discount_max_uses_per_user
+            discount_users_used,
+            discount_max_uses_per_user,
+            discount_start_date,
+            discount_end_date,
+            discount_type,
+            discount_value
         } = foundDiscount
         if (!discount_is_active) throw new NotFoundError("Discount expried!")
         if (!discount_max_uses) throw new NotFoundError("Discount are out!")
-        if (new Date() < new Date(discount_start_date) || new Date() > new Date(discount_end_date)) {
-            throw new NotFoundError('Discount expried!')
-        }
+        // if (new Date() < new Date(discount_start_date) || new Date() > new Date(discount_end_date)) {
+        //     throw new NotFoundError('Discount expried!')
+        // }
         // check xem co gia tri toi thieu hay khong
         let totalOrder = 0
         if (discount_min_order_value > 0) {
