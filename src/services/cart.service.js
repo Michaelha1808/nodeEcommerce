@@ -1,6 +1,7 @@
 'use strict'
 const { cart } = require('../models/cart.model')
 const { BadRequestError, NotFoundError } = require('../core/error.respone')
+const { getProductById } = require('../models/repositories/product.repo')
 
 
 /**
@@ -54,6 +55,62 @@ class CartService {
         }
         // if exist cart and have product
         return await CartService.updateUserCartQuantity({ userId, product })
+    }
+    // update cart
+    /**
+     * shop_order_ids:[
+     *      {
+     *          shopId,
+     *          item_products:[
+     *              {
+     *                  quantity,
+     *                  price,
+     *                  shopId,
+     *                  old_quantity,
+     *                  productId
+     *              }        
+     *          ],
+     *          version
+     *      }
+     * ]
+     */
+    static async addToCartV2({ userId, product = {} }) {
+        const { productId, quantity, old_quantity } = shop_order_ids[0]?.item_products[0]
+        // check product existed
+        const foundProduct = await getProductById(productId)
+        if (!foundProduct) throw new NotFoundError('Product not exist')
+        // compare
+        if (foundProduct.product_shop.toString() !== shop_order_ids[0]?.shopId) {
+            throw new NotFoundError('Product not found!')
+        }
+        if (quantiy === 0) {
+            // delete
+        }
+        return await CartService.updateUserCartQuantity({
+            userId,
+            product: {
+                productId,
+                quantity: quantity - old_quantity
+            }
+        })
+
+    }
+    static async deleteUserCart({ userId, productId }) {
+        const query = { cart_userId: userId, cart_state: 'active' },
+            updateSet = {
+                $pull: {
+                    cart_products: {
+                        productId
+                    }
+                }
+            }
+        const deleteCart = await cart.updateOne(query, updateSet)
+        return deleteCart
+    }
+    static async getListUserCart({ userId }) {
+        return await cart.findOne({
+            cart_userId: +userId
+        }).lean()
     }
 }
 
