@@ -74,7 +74,7 @@ class CartService {
      *      }
      * ]
      */
-    static async addToCartV2({ userId, product = {} }) {
+    static async addToCartV2({ userId, shop_order_ids = {} }) {
         const { productId, quantity, old_quantity } = shop_order_ids[0]?.item_products[0]
         // check product existed
         const foundProduct = await getProductById(productId)
@@ -83,7 +83,7 @@ class CartService {
         if (foundProduct.product_shop.toString() !== shop_order_ids[0]?.shopId) {
             throw new NotFoundError('Product not found!')
         }
-        if (quantiy === 0) {
+        if (quantity === 0) {
             // delete
         }
         return await CartService.updateUserCartQuantity({
