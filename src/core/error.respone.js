@@ -1,6 +1,6 @@
-const logger = require("../loggers/winston.log");
 const { StatusCodes, ReasonPhrases } = require("../utils/httpStatusCode");
-
+const mylogger = require("../loggers/mylogger.log");
+// const logger = require("../loggers/winston.log");
 const StatusCode = {
   FORBIDDEN: 403,
   CONFLICT: 409,
@@ -17,7 +17,12 @@ class ErrorRespone extends Error {
     this.status = status;
     //TODO
     // Log error use winston
-    logger.error(`${this.status} - ${this.message}`);
+    // logger.error(`${this.status} - ${this.message}`);
+    mylogger.error(this.message, [
+      "/api/v1/login",
+      "vv3344",
+      { error: "Bad request error" },
+    ]);
   }
 }
 
