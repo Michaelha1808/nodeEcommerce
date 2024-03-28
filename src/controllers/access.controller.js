@@ -33,8 +33,14 @@ class AccessController {
     if (!email) {
       throw new BadRequestError("email missing");
     }
+    const sendData = Object.assign(
+      {
+        requestId: req.requestId,
+      },
+      req.body
+    );
     new SuccessRespone({
-      metadata: await AccessService.login(req.body),
+      metadata: await AccessService.login(sendData),
     }).send(res);
   };
 

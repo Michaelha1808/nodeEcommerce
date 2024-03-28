@@ -1,4 +1,12 @@
 "use strict";
+
+/**
+ * error: lỗi nghiêm trọng, ảnh hưởng đến hoạt động của code,
+ * warning
+ * debug,
+ * info,
+ * requestId or traceId
+ */
 const { createLogger, format, transports } = require("winston");
 require("winston-daily-rotate-file");
 const { v4: uuidv4 } = require("uuid");

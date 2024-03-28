@@ -15,14 +15,16 @@ class ErrorRespone extends Error {
   constructor(message, status) {
     super(message);
     this.status = status;
+    this.now = Date.now();
+
     //TODO
     // Log error use winston
     // logger.error(`${this.status} - ${this.message}`);
-    mylogger.error(this.message, [
-      "/api/v1/login",
-      "vv3344",
-      { error: "Bad request error" },
-    ]);
+    // mylogger.error(this.message, [
+    //   "/api/v1/login",
+    //   "vv3344",
+    //   { error: "Bad request error" },
+    // ]);
   }
 }
 
